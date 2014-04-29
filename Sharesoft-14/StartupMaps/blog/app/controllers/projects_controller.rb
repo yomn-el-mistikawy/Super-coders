@@ -75,6 +75,73 @@ class ProjectsController < ApplicationController
     end
   end
 
+    # Definition: "As a startup, I can set a project goal, milestone,
+  # requirements (roles, resources)"
+  # This method allows you to edit a project given its project's id.
+  # Input: Project_id.
+  # Output: Project_id "specifically goals, milestones and requirements".
+  # Author: Hana Magdy.
+
+  def edit
+    @project = Project.find(params[:id])
+  end
+
+
+  # Definition: "As a startup, I can set a project goal, milestone,
+  # requirements (roles, resources)"
+  # Allows editing the project's details, specifically goals, milestones and requirements
+  # Redirects user to project's page (show project) on success
+  # Re-renders the edit project page on error and is linked to the edit HTML file
+  # update_attribute --> updates the rows
+  # respond_to --> gives a direct access to the HTML/XML/PDF whatever is it
+  # it's reachable and knows what's happening in the file.
+  # Input: project_id. "on the show page".
+  # Output: project "all project description along successfully edited goals, 
+  # milestones and requirements".
+  # Author: Hana Magdy.
+
+  def update
+    @project = Project.find(params[:id])
+
+    respond_to do |format|
+      if @project.update_attributes(params[:project].permit(:goals, :milestones, :requirements))
+        format.html { redirect_to @project, notice: "Successfully updated project" }
+      else
+        format.html { render :edit }
+      end
+    end
+
+  end
+
+
+  # Definition: "A project is launched after all requirements are met"
+  # Changes the status of a project and redirects to the project's 
+  # page (show project) on success or error
+  # with the exception of displaying a success/error message
+  # update_attribute --> updates the rows
+  # update the status of launch project from unlaunch to launched and vice versa.
+  # Input: project_id. "on the show page".
+  # Output: Void "it's an action" returns the success of the
+  # changeable button of launch upon of it's previous status. 
+  # Author: Hana Magdy.
+
+  def change_launch_status
+    project = Project.find(params[:id])
+    respond_to do |format|
+
+      if project.update_attribute(:launch, !project.launch)
+        flash.notice = "Successfully launched project"
+      else
+        flash.alert = "Oops, couldn't launch project"
+      end
+
+      format.html { redirect_to project }
+
+    end
+  end
+
+  # == End  == 
+
 
    def new
     @project = Project.new
