@@ -16,9 +16,7 @@ class ProjectsController < ApplicationController
     session[:entity_id] = 1
     @projects = Project.listing_projects(Startup.find(session[:entity_id]))
     # @projects = Project.all
-    # @startup = Startup.find(session[:entity_id])
-    # @projects = @startup.project.find( :all)
-
+    
     respond_to do |format|
       format.html
     end
